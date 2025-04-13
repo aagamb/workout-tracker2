@@ -1,10 +1,10 @@
 import { desc } from "drizzle-orm"
 
 import { db } from "@/database/db"
-import { todos } from "@/database/schema"
+// import { todos } from "@/database/schema"
 
 import { Button } from "@/components/ui/button"
-import { deleteTodo } from "@/actions/todos"
+// import { deleteTodo } from "@/actions/todos"
 
 export const dynamic = 'force-dynamic'
 
