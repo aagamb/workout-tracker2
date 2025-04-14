@@ -5,6 +5,8 @@ import { db } from "@/database/db";
 import { workouts, userWorkouts } from "@/database/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { v4 as uuidv4 } from "uuid";
+import { exercises } from "@/database/schema";
+import { revalidatePath } from "next/cache";
 
 export async function createWorkout(formData: FormData) {
   const user = await getCurrentUser();
@@ -35,4 +37,29 @@ export async function createWorkout(formData: FormData) {
   });
 
   return { success: true };
+}
+
+
+export async function addExercise(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const userWorkoutId = formData.get("userWorkoutId") as string;
+  const name = formData.get("name") as string;
+  const weight = parseInt(formData.get("weight") as string);
+  const reps = parseInt(formData.get("reps") as string);
+
+  if (!name || isNaN(weight) || isNaN(reps)) return;
+
+  await db.insert(exercises).values({
+    id: uuidv4(),
+    userWorkoutId,
+    name,
+    weight,
+    reps,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  revalidatePath("/workouts");
 }

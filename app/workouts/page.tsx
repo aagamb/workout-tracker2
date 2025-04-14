@@ -1,11 +1,11 @@
 // app/workouts/page.tsx
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/database/db";
-import { userWorkouts, workouts } from "@/database/schema";
+import { userWorkouts, workouts, exercises } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { Button } from "@/components/ui/button";
-import { createWorkout } from "./actions";
 import WorkoutItem from "@/components/WorkoutItem";
+import { createWorkout } from "./actions";
 import { revalidatePath } from "next/cache";
 
 export default async function WorkoutsPage() {
@@ -15,15 +15,31 @@ export default async function WorkoutsPage() {
     return <div className="text-center mt-10 text-gray-500">Please sign in to view your workouts.</div>;
   }
 
-  const myWorkouts = await db
-    .select({
-      id: userWorkouts.id,
-      name: workouts.name,
-      customName: userWorkouts.customName,
-    })
+  // Fetch workouts + nested exercises
+  const userWorkoutRecords = await db
+    .select()
     .from(userWorkouts)
-    .innerJoin(workouts, eq(userWorkouts.workoutId, workouts.id))
     .where(eq(userWorkouts.userId, user.id));
+
+  const workoutDetails = await Promise.all(
+    userWorkoutRecords.map(async (uw) => {
+      const workout = await db.query.workouts.findFirst({
+        where: eq(workouts.id, uw.workoutId),
+      });
+
+      const allExercises = await db
+        .select()
+        .from(exercises)
+        .where(eq(exercises.userWorkoutId, uw.id));
+
+      return {
+        id: uw.id,
+        customName: uw.customName,
+        name: workout?.name || "",
+        exercises: allExercises,
+      };
+    })
+  );
 
   async function handleCreateWorkout(formData: FormData) {
     "use server";
@@ -35,15 +51,11 @@ export default async function WorkoutsPage() {
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">My Workouts</h1>
 
-      {myWorkouts.length === 0 ? (
-        <p className="text-gray-500">You haven't created any workouts yet.</p>
-      ) : (
-        <ul className="space-y-4">
-          {myWorkouts.map((w) => (
-            <WorkoutItem key={w.id} workout={w} />
-          ))}
-        </ul>
-      )}
+      <ul className="space-y-4">
+        {workoutDetails.map((w) => (
+          <WorkoutItem key={w.id} workout={w} />
+        ))}
+      </ul>
 
       {/* Create Workout Form */}
       <form action={handleCreateWorkout} className="mt-6 space-y-2">
