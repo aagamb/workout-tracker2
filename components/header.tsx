@@ -15,6 +15,7 @@ export async function Header() {
                         <Link href="/todos">
                             <Button variant="ghost">Todos</Button>
                         </Link>
+                        <Link href="/workouts" className="hover:underline">Workouts</Link>
                     </nav>
                 </div>
 
