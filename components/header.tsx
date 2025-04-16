@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { UserButton } from "@daveyplate/better-auth-ui"
 import { Button } from "./ui/button"
-import { AdminNavEntry } from "./AdminNavEntry"
 
 export async function Header() {
 
@@ -16,8 +15,6 @@ export async function Header() {
                         <Link href="/todos">
                             <Button variant="ghost">Todos</Button>
                         </Link>
-                        <AdminNavEntry />
-                        <Link href="/workouts" className="hover:underline">Workouts</Link>
                     </nav>
                 </div>
 
