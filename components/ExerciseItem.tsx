@@ -1,9 +1,7 @@
-'use client';
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner"; // Assuming you use Sonner for notifications
+import { toast } from "sonner";
 
 type Exercise = {
   id: string;
@@ -15,11 +13,13 @@ type Exercise = {
 type Props = {
   exercise: Exercise;
   editable?: boolean;
+  onDelete?: (id: string) => void; // optional callback to remove it from parent list
 };
 
-export default function ExerciseItem({ exercise, editable = false }: Props) {
+export default function ExerciseItem({ exercise, editable = false, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Exercise>(exercise);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleChange = (field: keyof Exercise, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -29,17 +29,34 @@ export default function ExerciseItem({ exercise, editable = false }: Props) {
     try {
       const res = await fetch(`/api/exercises/${exercise.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error('Failed to update exercise');
       toast.success('Exercise updated');
       setIsEditing(false);
-    } catch (err) {
+    } catch {
       toast.error('Error updating exercise');
+    }
+  };
+
+  const deleteExercise = async () => {
+    if (!confirm("Are you sure you want to delete this exercise?")) return;
+
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/exercises/${exercise.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) throw new Error('Failed to delete exercise');
+      toast.success('Exercise deleted');
+      if (onDelete) onDelete(exercise.id);
+    } catch {
+      toast.error('Error deleting exercise');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -59,6 +76,9 @@ export default function ExerciseItem({ exercise, editable = false }: Props) {
                 Save
               </Button>
             )}
+            <Button size="sm" variant="destructive" onClick={deleteExercise} disabled={isDeleting}>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
           </div>
         )}
       </div>

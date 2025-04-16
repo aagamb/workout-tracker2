@@ -21,4 +21,15 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
       return NextResponse.json({ error: "Failed to update exercise" }, { status: 500 });
     }
   }
+
+  export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+    const { id } = await context.params;
   
+    try {
+      await db.delete(exercises).where(eq(exercises.id, id));
+      return NextResponse.json({ message: "Exercise deleted" });
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json({ error: "Failed to delete exercise" }, { status: 500 });
+    }
+  }
