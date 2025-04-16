@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import ExerciseItem from "./ExerciseItem";
 import AddExerciseForm from "./AddExerciseForm";
+import { useRouter } from "next/navigation";
 
 type WorkoutWithExercises = {
   id: string;
@@ -30,6 +31,8 @@ export default function WorkoutItem({
   const [exercises, setExercises] = useState(workout.exercises); // ✅ local state
   const [isPending, startTransition] = useTransition();
   const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+
 
   const deleteWorkout = async () => {
     if (!confirm("Delete this entire workout? This cannot be undone.")) return;
@@ -41,7 +44,7 @@ export default function WorkoutItem({
       });
 
       if (!res.ok) throw new Error("Failed to delete workout");
-      onDelete?.(workout.id); // Notify parent to remove from UI
+      router.refresh(); 
     } catch {
       alert("Error deleting workout");
     } finally {
