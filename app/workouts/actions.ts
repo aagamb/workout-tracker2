@@ -1,11 +1,9 @@
-// app/workouts/actions.ts
 'use server';
 
 import { db } from "@/database/db";
-import { workouts, userWorkouts } from "@/database/schema";
+import { workouts, userWorkouts, exercises } from "@/database/schema";
 import { getCurrentUser } from "@/lib/auth";
-import { v4 as uuidv4 } from "uuid";
-import { exercises } from "@/database/schema";
+import { nanoid } from "nanoid"; // ✅ replacing uuid
 import { revalidatePath } from "next/cache";
 
 export async function createWorkout(formData: FormData) {
@@ -15,10 +13,9 @@ export async function createWorkout(formData: FormData) {
   const name = formData.get("name") as string;
   const customName = formData.get("customName") as string;
 
-  const workoutId = uuidv4();
-  const userWorkoutId = uuidv4();
+  const workoutId = nanoid();
+  const userWorkoutId = nanoid();
 
-  // insert into workouts table (global list like "Arms")
   await db.insert(workouts).values({
     id: workoutId,
     name,
@@ -26,7 +23,6 @@ export async function createWorkout(formData: FormData) {
     updatedAt: new Date(),
   });
 
-  // link it to the user
   await db.insert(userWorkouts).values({
     id: userWorkoutId,
     workoutId,
@@ -39,7 +35,6 @@ export async function createWorkout(formData: FormData) {
   return { success: true };
 }
 
-
 export async function addExercise(formData: FormData) {
   const user = await getCurrentUser();
   if (!user) return;
@@ -51,7 +46,7 @@ export async function addExercise(formData: FormData) {
   if (!name || isNaN(weight) || reps === "") return;
 
   await db.insert(exercises).values({
-    id: uuidv4(),
+    id: nanoid(),
     userWorkoutId,
     name,
     weight,

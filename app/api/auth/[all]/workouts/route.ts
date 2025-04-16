@@ -1,16 +1,15 @@
-// app/api/workouts/route.ts
-import { db } from "@/database/db";
+  // app/api/workouts/route.ts
+  import { db } from "@/database/db";
 import { userWorkouts, workouts } from "@/database/schema";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid"; // ✅ replacing uuid
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers"
-import { betterAuth } from "better-auth"
+import { headers } from "next/headers";
+import { betterAuth } from "better-auth";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function POST(req: Request) {
-  
-const  user = await getCurrentUser()
+  const user = await getCurrentUser();
 
   if (!user) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -18,10 +17,9 @@ const  user = await getCurrentUser()
 
   const { name, customName } = await req.json();
 
-  const workoutId = uuidv4();
-  const userWorkoutId = uuidv4();
+  const workoutId = nanoid();
+  const userWorkoutId = nanoid();
 
-  // Check if workout type already exists or insert
   const existingWorkout = await db
     .select()
     .from(workouts)
