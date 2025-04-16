@@ -68,3 +68,7 @@
 //         </main>
 //     )
 // } 
+
+export default function AdminPage() {
+    return <div>Admin page under construction</div>;
+  }

@@ -39,3 +39,7 @@
 //         </main>
 //     )
 // } 
+
+export default function TodosPage() {
+    return <div>Admin page under construction</div>;
+  }
