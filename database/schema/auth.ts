@@ -70,7 +70,7 @@ export const workouts = pgTable("workouts", {
 	userWorkoutId: text("user_workout_id").notNull().references(() => userWorkouts.id, { onDelete: "cascade" }),
 	name: text("name").notNull(), // e.g., Bicep Curl
 	weight: integer("weight").notNull(),
-	reps: integer("reps").notNull(),
+	reps: text("reps").notNull(),
 	createdAt: timestamp("created_at").notNull(),
 	updatedAt: timestamp("updated_at").notNull()
   });

@@ -1,5 +1,5 @@
 {
-  "id": "cc77cf56-ca84-4818-b2ee-71ee41d3b506",
+  "id": "c4a9b731-7f5e-47ef-bd9a-5fdd39cd3a3c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -241,7 +241,7 @@
         },
         "reps": {
           "name": "reps",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },

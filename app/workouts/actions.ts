@@ -47,9 +47,8 @@ export async function addExercise(formData: FormData) {
   const userWorkoutId = formData.get("userWorkoutId") as string;
   const name = formData.get("name") as string;
   const weight = parseInt(formData.get("weight") as string);
-  const reps = parseInt(formData.get("reps") as string);
-
-  if (!name || isNaN(weight) || isNaN(reps)) return;
+  const reps = formData.get("reps") as string;
+  if (!name || isNaN(weight) || reps === "") return;
 
   await db.insert(exercises).values({
     id: uuidv4(),

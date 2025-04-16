@@ -13,7 +13,7 @@ type WorkoutWithExercises = {
     id: string;
     name: string;
     weight: number;
-    reps: number;
+    reps: string;
   }[];
 };
 

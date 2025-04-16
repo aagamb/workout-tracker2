@@ -24,14 +24,14 @@ export default function AddExerciseForm({ userWorkoutId }: { userWorkoutId: stri
             className="border p-2 rounded w-full"
           />
           <input
-            type="number"
+            type="text"
             name="weight"
-            placeholder="Weight (kg)"
+            placeholder="Weight (lb)"
             required
             className="border p-2 rounded w-full"
           />
           <input
-            type="number"
+            type="text"
             name="reps"
             placeholder="Reps"
             required

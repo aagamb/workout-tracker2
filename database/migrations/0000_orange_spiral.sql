@@ -33,7 +33,7 @@ CREATE TABLE "exercises" (
 	"user_workout_id" text NOT NULL,
 	"name" text NOT NULL,
 	"weight" integer NOT NULL,
-	"reps" integer NOT NULL,
+	"reps" text NOT NULL,
 	"created_at" timestamp NOT NULL,
 	"updated_at" timestamp NOT NULL
 );

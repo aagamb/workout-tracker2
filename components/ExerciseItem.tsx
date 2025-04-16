@@ -8,7 +8,7 @@ type Props = {
     id: string;
     name: string;
     weight: number;
-    reps: number;
+    reps: string;
   };
   editable?: boolean;
 };
@@ -29,7 +29,7 @@ export default function ExerciseItem({ exercise, editable = false }: Props) {
       </div>
       {expanded && (
         <div className="mt-2 text-sm text-gray-600">
-          <p>Weight: {exercise.weight}kg</p>
+          <p>Weight: {exercise.weight}lb</p>
           <p>Reps: {exercise.reps}</p>
         </div>
       )}
