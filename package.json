@@ -4,6 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "prebuild": "pnpm add uuid",
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
@@ -76,4 +77,5 @@
         }
     },
     "packageManager": "pnpm@10.6.5"
+    
 }
