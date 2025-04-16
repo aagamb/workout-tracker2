@@ -1,4 +1,7 @@
 import Image from "next/image"
+import { v4 as uuidv4 } from "uuid";
+
+const lorem = uuidv4();
 
 export default function Home() {
     return (
