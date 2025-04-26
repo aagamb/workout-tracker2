@@ -13,10 +13,11 @@ type Exercise = {
 type Props = {
   exercise: Exercise;
   editable?: boolean;
-  onDelete?: (id: string) => void; // optional callback to remove it from parent list
+  onDelete?: (id: string) => void;
+  onUpdate?: (updatedExercise: Exercise) => void;  // optional callback to remove it from parent list
 };
 
-export default function ExerciseItem({ exercise, editable = false, onDelete }: Props) {
+export default function ExerciseItem({ exercise, editable = false, onDelete, onUpdate }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Exercise>(exercise);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -36,9 +37,12 @@ export default function ExerciseItem({ exercise, editable = false, onDelete }: P
       if (!res.ok) throw new Error('Failed to update exercise');
       toast.success('Exercise updated');
       setIsEditing(false);
+
+      if (onUpdate) onUpdate(formData);
     } catch {
       toast.error('Error updating exercise');
     }
+
   };
 
   const deleteExercise = async () => {

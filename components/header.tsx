@@ -9,12 +9,9 @@ export async function Header() {
             <div className="container mx-auto flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <Link href="/" className="flex items-center gap-2">
-                        CS 5356 – HW 6
+                        Workout Tracker
                     </Link>
                     <nav className="flex items-center gap-2">
-                        <Link href="/todos">
-                            <Button variant="ghost">Todos</Button>
-                        </Link>
                         <Link href="/workouts" className="hover:underline">Workouts</Link>
                     </nav>
                 </div>
